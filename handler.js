@@ -4,9 +4,12 @@ exports.processEvents = async (event) => {
     let eventBody = event.payload.body;
     let eventHeaders = event.payload.headers;
     let queryParameters = event.payload.queryParameters;
+    let returnValue = {
+        events: []
+    };
     let intercomEvent = get(eventBody, 'topic', false);
     if (intercomEvent === false) {
-        return false;
+        return (returnValue);
     }
     let events = {
         "conversation.user.created": "Live Chat Conversation Started",
@@ -19,23 +22,23 @@ exports.processEvents = async (event) => {
         if (events[intercomEvent] !== 'null' || events[intercomEvent] !== null || events[intercomEvent] !== null) {
             return events[intercomEvent];
         } else {
-            return false;
+            return (returnValue);
         }
     };
     if (eventName === false) {
-        return false;
+        return (returnValue);
     }
     let item = get(eventBody, 'data["item"]', false);
     if (item === false) {
-        return false;
+        return (returnValue);
     }
     let user = get(item, 'user', false);
     if (user === false) {
-        return false;
+        return (returnValue);
     }
     let userId = get(user, 'user_id', false);
     if (userId === undefined || userId === null || userId === "null" || userId === "") {
-        return false;
+        return (returnValue);
     }
     //Uses user_id field in Intercom for userId
     let userTraits = {
@@ -46,7 +49,7 @@ exports.processEvents = async (event) => {
     };
     let assignee = get(item, 'assignee', false);
     if (assignee === false) {
-        return false;
+        return (returnValue);
     }
     // Uses Segment's Live Chat tracking spec by default
     let eventProperties = {
@@ -57,7 +60,7 @@ exports.processEvents = async (event) => {
         message_id: eventBody.id,
         conversation_url: item.links.conversation_web
     };
-    let returnValue = {
+    returnValue = {
         events: [{
             type: 'identify',
             userId: userId,
