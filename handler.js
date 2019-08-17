@@ -1,11 +1,13 @@
-var get = require('lodash.get')
+var get = require('lodash.get');
 
 exports.processEvents = async (event) => {
     let eventBody = event.payload.body;
     let eventHeaders = event.payload.headers;
     let queryParameters = event.payload.queryParameters;
-
-    let intercomEvent = eventBody['topic'];
+    let intercomEvent = get(eventBody, 'topic', false);
+    if (intercomEvent === false) {
+        return false;
+    }
     let events = {
         "conversation.user.created": "Live Chat Conversation Started",
         "conversation.admin.closed": "Live Chat Conversation Ended",
@@ -19,7 +21,7 @@ exports.processEvents = async (event) => {
         } else {
             return false;
         }
-    }
+    };
     if (eventName === false) {
         return false;
     }
@@ -68,6 +70,5 @@ exports.processEvents = async (event) => {
                 properties: eventProperties
             }]
     };
-
     return (returnValue)
 };
