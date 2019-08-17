@@ -31,10 +31,11 @@ exports.processEvents = async (event) => {
     if (user === false) {
         return false;
     }
-    let userId = user.user_id;
+    let userId = get(user, 'user_id', false);
     if (userId === undefined || userId === null || userId === "null" || userId === "") {
         return false;
     }
+    //Uses user_id field in Intercom for userId
     let userTraits = {
         userId: userId,
         email: user.email,
@@ -45,6 +46,7 @@ exports.processEvents = async (event) => {
     if (assignee === false) {
         return false;
     }
+    // Uses Segment's Live Chat tracking spec by default
     let eventProperties = {
         agent_id: assignee.id,
         agent_username: assignee.name,
