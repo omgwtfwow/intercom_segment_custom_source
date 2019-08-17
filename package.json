@@ -1,0 +1,15 @@
+{
+  "name": "segment_intercom_custom_source",
+  "version": "1.0.0",
+  "description": "Integrates Intercom with Segment's custom source functionality",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  }
+}
